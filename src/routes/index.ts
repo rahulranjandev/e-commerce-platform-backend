@@ -5,6 +5,9 @@ const router = Router();
 
 import authRoutes from './auth.routes';
 import userRoutes from './user.routes';
+import productRoutes from './product.routes';
+import reviewRoutes from './review.routes';
+import orderRoutes from './order.routes';
 
 import { AuthController } from '@controllers/authController';
 import { PasswdController } from '@/controllers/passwdController';
@@ -62,5 +65,23 @@ router.use('/api/auth', authRoutes);
  * @route /api/user
  */
 router.use('/api/user', userRoutes);
+
+/**
+ * @description Product Routes - /api/product - Public Routes
+ * @route /api/product
+ */
+router.use('/api/product', productRoutes);
+
+/**
+ * @description Review Routes - /api/review - Public Routes
+ * @route /api/review
+ */
+router.use('/api/review', reviewRoutes);
+
+/**
+ * @description Order Routes - /api/order - Private Routes
+ * @route /api/order
+ */
+router.use('/api/order', orderRoutes);
 
 export default router;

@@ -7,7 +7,7 @@ export class UserService {
    * @Access Middleware access - Protected
    */
   public async getUserById(id: string): Promise<IUser | null> {
-    return await User.findById(id).lean().select('-password');
+    return await User.findById(id).lean().select('-password').select('-token');
   }
 
   /**
@@ -23,7 +23,9 @@ export class UserService {
    * @Access User access - Protected
    */
   public async getUserByQuery(query: FilterQuery<IUser>): Promise<IUser | null> {
-    return await User.findOne(query as FilterQuery<IUser>).select('-password');
+    return await User.findOne(query as FilterQuery<IUser>)
+      .select('-password')
+      .select('-token');
   }
 
   /**
