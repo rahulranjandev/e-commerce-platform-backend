@@ -12,7 +12,7 @@ This repository contains the backend code for our e-commerce platform. It is bui
 
 ## Installation
 
-1. Clone the repository: `git clone https://github.com/your-username/e-commerce-platform-backend.git`
+1. Clone the repository: `git clone https://github.com/rahulranjan937/e-commerce-platform-backend.git`
 2. Install dependencies: `npm install`
 3. Set up environment variables: Create a `.env` file and add the necessary variables.
 4. Start the server: `npm start`
