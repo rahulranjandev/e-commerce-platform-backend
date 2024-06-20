@@ -1,4 +1,4 @@
-import { FilterQuery, QueryOptions, UpdateQuery, ObjectId } from 'mongoose';
+import { FilterQuery, QueryOptions, UpdateQuery, Types } from 'mongoose';
 import { IOrder, Order } from '@models/orderModel';
 
 export class OrderService {
@@ -7,7 +7,7 @@ export class OrderService {
    * @Access Middleware access - Protected
    */
   public async getOrdersByUser(userId: string): Promise<IOrder[]> {
-    return await Order.find({ user: userId }).lean();
+    return await Order.find({ user: userId, status: { $ne: 'pending' } }).lean();
   }
 
   /**
@@ -39,7 +39,7 @@ export class OrderService {
    * @Access User access - Protected
    */
   public async updateOrder(id: string, order: IOrder | any): Promise<IOrder | null> {
-    return await Order.findOneAndUpdate({ _id: id }, order, { upsert: true });
+    return await Order.findOneAndUpdate({ _id: id }, order, { upsert: false, new: true });
   }
 
   /**
@@ -56,5 +56,19 @@ export class OrderService {
    */
   public async cancelOrder(id: string, userId: string, order: IOrder | any): Promise<IOrder | null> {
     return await Order.findOneAndUpdate({ _id: id, user: userId }, order, { upsert: true });
+  }
+
+  /**
+   * @description Check if user has ordered a product before reviewing
+   * @Access User access
+   */
+  public async checkUserOrder(productId: Types.ObjectId | string | any, userId: Types.ObjectId): Promise<boolean> {
+    const OrderItem = await Order.aggregate([
+      { $match: { user: userId } },
+      { $unwind: '$orderItems' },
+      { $match: { 'orderItems.product': productId } },
+    ]);
+
+    return OrderItem.length > 0;
   }
 }

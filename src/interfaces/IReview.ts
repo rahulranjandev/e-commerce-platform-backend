@@ -3,6 +3,13 @@ import { IReview, Review } from '@models/reviewModel';
 
 export class ReviewService {
   /**
+   * @description Get Reviews by Product
+   * @Access Public access
+   */
+  public async getReviewsByProduct(productId: string): Promise<IReview[]> {
+    return await Review.find({ product: productId }).lean();
+  }
+  /**
    * @description Get Review Info
    * @Access Middleware access - Protected
    */
@@ -31,7 +38,7 @@ export class ReviewService {
    * @Access User access - Protected
    */
   public async updateReview(id: string, review: IReview | any): Promise<IReview | null> {
-    return await Review.findOneAndUpdate({ _id: id }, review, { upsert: true });
+    return await Review.findOneAndUpdate({ _id: id }, review, { upsert: false });
   }
 
   /**
@@ -54,12 +61,20 @@ export class ReviewService {
    * @description Get average rating of a product
    * @Access Public access
    */
-  public async getAverageRating(productId: ObjectId): Promise<number> {
+  public async getAverageRating(productId: string | any): Promise<number> {
     const avgRating = await Review.aggregate([
       { $match: { product: productId } },
       { $group: { _id: '$product', avgRating: { $avg: '$rating' } } },
     ]);
 
     return avgRating[0].avgRating;
+  }
+
+  /**
+   * @description Check if user has already reviewed a product
+   * @Access User access
+   */
+  public async getReviewByUser(productId: string, userId: string): Promise<IReview | null> {
+    return await Review.findOne({ product: productId, user: userId });
   }
 }

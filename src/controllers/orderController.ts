@@ -13,7 +13,48 @@ export class OrderController {
 
   public createOrder = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const order = await this.orderService.createOrder(req.body);
+      const userId = res.locals.user.id;
+      const productId = req.body.orderItems[0].product;
+
+      // Check the product availability and InStock
+      const product = await this.productService.getProductById(productId);
+
+      if (!product) {
+        return res.status(400).json({
+          message: 'Product not found',
+        });
+      }
+
+      if (product.countInStock < req.body.orderItems[0].qty) {
+        return res.status(400).json({
+          message: 'Product out of stock',
+        });
+      }
+
+      const orderData = {
+        user: userId,
+        orderItems: {
+          name: product.name,
+          qty: req.body.orderItems[0].qty,
+          image: product.image,
+          price: product.price,
+          product: productId,
+        },
+        shippingAddress: {
+          address: req.body.shippingAddress.address,
+          city: req.body.shippingAddress.city,
+          postalCode: req.body.shippingAddress.postalCode,
+          country: req.body.shippingAddress.country,
+          phone: req.body.shippingAddress.phone,
+        },
+        paymentMethod: req.body.paymentMethod,
+        itemsPrice: req.body.itemsPrice,
+        taxPrice: req.body.taxPrice,
+        shippingPrice: req.body.shippingPrice,
+        totalPrice: req.body.totalPrice,
+      };
+
+      const order = await this.orderService.createOrder(orderData);
 
       // Logic to update the product stock goes here
       for (const item of order.orderItems) {
@@ -42,18 +83,62 @@ export class OrderController {
     }
   };
 
-  public updateOrder = async (req: Request, res: Response, next: NextFunction) => {
+  public updateOrderStatus = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const order = await this.orderService.updateOrder(req.params.id, req.body);
+      const userId = res.locals.user.id;
+      const orderId = req.query.oid as string;
+      const {
+        status,
+        paymentMethod,
+        paymentResult,
+        itemsPrice,
+        taxPrice,
+        shippingPrice,
+        totalPrice,
+        isPaid,
+        paidAt,
+        isDelivered,
+        deliveredAt,
+        cancelledAt,
+      } = req.body;
 
-      if (!order) {
-        return res.status(404).json({
-          message: 'Order not found',
-        });
+      // Fetch the order
+      const existingOrder = await this.orderService.getOrderByQuery({ _id: orderId, user: userId });
+
+      // Check if the order exists
+      if (!existingOrder) {
+        return res.status(404).json({ message: 'Order not found' });
       }
 
+      // Check if the user is authorized to update the order
+      if (existingOrder.user.toString() !== userId) {
+        return res.status(401).json({ message: 'You are not authorized to update this order' });
+      }
+
+      // Update order data
+      const orderData = {
+        status: status || existingOrder.status,
+        paymentMethod: paymentMethod || existingOrder.paymentMethod,
+        paymentResult: paymentResult || existingOrder.paymentResult,
+        itemsPrice: itemsPrice || existingOrder.itemsPrice,
+        taxPrice: taxPrice || existingOrder.taxPrice,
+        shippingPrice: shippingPrice || existingOrder.shippingPrice,
+        totalPrice: totalPrice || existingOrder.totalPrice,
+        isPaid: isPaid !== undefined ? isPaid : existingOrder.isPaid,
+        paidAt: paidAt || existingOrder.paidAt,
+        isDelivered: isDelivered !== undefined ? isDelivered : existingOrder.isDelivered,
+        deliveredAt: deliveredAt || existingOrder.deliveredAt,
+        cancelledAt: cancelledAt || existingOrder.cancelledAt,
+      };
+
+      const updatedOrder = await this.orderService.findAndUpdateOrder(
+        { _id: orderId },
+        { $set: orderData },
+        { new: true }
+      );
+
       return res.status(200).json({
-        data: order,
+        data: updatedOrder,
       });
     } catch (err: any) {
       res.status(500).send('Internal Server Error');
@@ -63,16 +148,44 @@ export class OrderController {
 
   public cancelOrder = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const orderId = req.query.oid as string;
+      const userId = res.locals.user.id;
+
+      // Fetch the order
+      const existingOrder = await this.orderService.getOrderByQuery({ _id: orderId, user: userId });
+
+      // Check if the order exists
+      if (!existingOrder) {
+        return res.status(404).json({ message: 'Order not found' });
+      }
+
+      // Check if the user is authorized to cancel the order
+      if (existingOrder.user.toString() !== userId) {
+        return res.status(401).json({ message: 'You are not authorized to cancel this order' });
+      }
+
+      // Check if the order is already cancelled or delivered
+      if (existingOrder.status === 'cancelled') {
+        return res.status(400).json({ message: 'Order is already cancelled' });
+      }
+      if (existingOrder.isDelivered) {
+        return res.status(400).json({ message: 'Delivered orders cannot be cancelled' });
+      }
+      // Prepare payload for cancellation
       const payload = {
-        id: req.params.id,
-        user: res.locals.user.id,
         status: 'cancelled',
         cancelledAt: new Date(),
       };
-      const order = await this.orderService.cancelOrder(payload.id, payload.user, payload);
+
+      // Cancel the order
+      const cancelledOrder = await this.orderService.findAndUpdateOrder(
+        { _id: orderId },
+        { $set: payload },
+        { new: true }
+      );
 
       return res.status(200).json({
-        data: order,
+        data: cancelledOrder,
         message: 'Your order has been cancelled successfully',
       });
     } catch (err: any) {
@@ -84,13 +197,9 @@ export class OrderController {
   public getOrdersByUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userID = res.locals.user.id;
-      const orders = await this.orderService.getOrdersByUser(userID);
 
-      if (!orders) {
-        return res.status(404).json({
-          message: 'Something went wrong',
-        });
-      }
+      // Fetch orders by user && status !== "pending"
+      const orders = await this.orderService.getOrdersByUser(userID);
 
       return res.status(200).json({
         data: orders,

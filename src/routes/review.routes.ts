@@ -14,11 +14,12 @@ const onlyAdminAccess = new OnlyAdminAccess();
 const Review = new ReviewController();
 
 /**
- * @description Get Reviews - /api/v1/review - Public Routes
+ * @description Get Product Reviews - /api/v1/review - Public Routes
  * @access Public
- * @alias GET /api/v1/review
+ * @alias GET /api/v1/review?pid=productId
+ * @query ?pid=productId
  */
-// router.get('/', Review.getReviews);
+router.get('/', Review.getProductReviews);
 
 /**
  * @description Get Review - /api/v1/review/:id - Public Routes
@@ -31,7 +32,8 @@ const Review = new ReviewController();
 /**
  * @description Create Review - /api/v1/review - Private Routes
  * @access User Access - Private
- * @alias POST /api/v1/review
+ * @alias POST /api/v1/review?pid=productId
+ * @query ?pid=productId
  */
 router.post('/', authMiddleware.isAuthenticated, Review.createProductReview);
 

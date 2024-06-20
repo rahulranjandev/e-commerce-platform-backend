@@ -72,7 +72,7 @@ const orderSchema = new Schema<IOrder>(
     status: {
       type: String,
       required: true,
-      default: 'pending',
+      default: 'pending', // pending, confirmed, shipped, delivered, cancelled
     },
     shippingAddress: {
       address: {
@@ -102,7 +102,7 @@ const orderSchema = new Schema<IOrder>(
     },
     paymentResult: {
       id: { type: String },
-      status: { type: String },
+      status: { type: String }, // pending, completed, failed
       update_time: { type: String },
       email_address: { type: String },
     },
