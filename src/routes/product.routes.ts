@@ -53,6 +53,7 @@ router.post(
   '/',
 
   authMiddleware.isAuthenticated,
+  authMiddleware.requireUser,
   onlyAdminAccess.onlyAdmimAccess(true),
   upload.any(),
   validateSchema(createProductSchema),
@@ -70,6 +71,7 @@ router.put(
   '/:productId',
 
   authMiddleware.isAuthenticated,
+  authMiddleware.requireUser,
   onlyAdminAccess.onlyAdmimAccess(true),
   upload.any(),
   validateSchema(updateProductSchema),
@@ -87,6 +89,7 @@ router.delete(
   '/:productId',
 
   authMiddleware.isAuthenticated,
+  authMiddleware.requireUser,
   onlyAdminAccess.onlyAdmimAccess(true),
   validateSchema(ProductByIdSchema),
 

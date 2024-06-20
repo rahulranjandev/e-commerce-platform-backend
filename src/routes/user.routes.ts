@@ -21,6 +21,7 @@ const User = new UserController();
  */
 router.get(
   '/',
+
   authMiddleware.isAuthenticated,
   authMiddleware.requireUser,
 
@@ -34,6 +35,7 @@ router.get(
  */
 router.put(
   '/',
+
   authMiddleware.isAuthenticated,
   authMiddleware.requireUser,
   validateSchema(updateUserSchema),
@@ -47,6 +49,14 @@ router.put(
  * @alias DELETE /api/v1/user/:id
  * @params id
  */
-router.delete('/:id', authMiddleware.isAuthenticated, onlyAdminAccess.onlyAdmimAccess(true), User.deleteUser);
+router.delete(
+  '/:id',
+
+  authMiddleware.isAuthenticated,
+  authMiddleware.requireUser,
+  onlyAdminAccess.onlyAdmimAccess(true),
+
+  User.deleteUser
+);
 
 export default router;

@@ -26,6 +26,8 @@ export const {
   MAILGUN_DOMAIN,
   FROM_SUPPORT_EMAIL,
   FROM_SENDER_EMAIL,
+  RAZORPAY_KEY_ID,
+  RAZORPAY_KEY_SECRET,
   SUPPORT_EMAIL,
   LOGO_URL,
 } = process.env;
@@ -88,4 +90,12 @@ if (!AZURE_STORAGE_CONNECTION_STRING) {
 
 if (!BLOB_CONTAINER_NAME) {
   throw new Error('BLOB_CONTAINER_NAME is missing');
+}
+
+if (!RAZORPAY_KEY_ID) {
+  throw new Error('RAZORPAY_KEY_ID is missing');
+}
+
+if (!RAZORPAY_KEY_SECRET) {
+  throw new Error('RAZORPAY_KEY_SECRET is missing');
 }

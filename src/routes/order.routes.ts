@@ -18,7 +18,7 @@ const Order = new OrderController();
  * @access User Access - Private
  * @alias GET /api/v1/order
  */
-router.get('/', authMiddleware.isAuthenticated, Order.getOrdersByUser);
+router.get('/', authMiddleware.isAuthenticated, authMiddleware.requireUser, Order.getOrdersByUser);
 
 /**
  * @description Get Order - /api/v1/order/:id - Private Routes
@@ -26,14 +26,22 @@ router.get('/', authMiddleware.isAuthenticated, Order.getOrdersByUser);
  * @alias GET /api/v1/order/:id
  * @params id
  */
-router.get('/:id', authMiddleware.isAuthenticated, Order.getOrderById);
+router.get('/:id', authMiddleware.isAuthenticated, authMiddleware.requireUser, Order.getOrderById);
 
 /**
  * @description Create Order - /api/v1/order - Private Routes
  * @access User Access - Private
  * @alias POST /api/v1/order
  */
-router.post('/', authMiddleware.isAuthenticated, Order.createOrder);
+router.post('/', authMiddleware.isAuthenticated, authMiddleware.requireUser, Order.createOrder);
+
+/**
+ * @description Verify Order Payment - /api/v1/order/:id - Private Routes
+ * @access User Access - Private
+ * @alias PUT /api/v1/order/:id
+ * @params id
+ */
+router.put('/verify', authMiddleware.isAuthenticated, authMiddleware.requireUser, Order.verifyOrderPayment);
 
 /**
  * @description Update Order - /api/v1/order/:id - Private Routes
@@ -41,14 +49,14 @@ router.post('/', authMiddleware.isAuthenticated, Order.createOrder);
  * @alias PUT /api/v1/order?oid=order_id
  * @query ?oid=order_id
  */
-router.put('/', authMiddleware.isAuthenticated, Order.updateOrderStatus);
+router.put('/', authMiddleware.isAuthenticated, authMiddleware.requireUser, Order.updateOrderStatus);
 
 /**
- * @description Cancel Order - /api/v1/order/:id - Private Routes
+ * @description Cancel Order - /api/v1/order/cancel - Private Routes
  * @access User Access - Private
- * @alias PUT /api/v1/order?oid=order_id
+ * @alias PUT /api/v1/order/cancel?oid=order_id
  * @params ?oid=order_id
  */
-router.put('/', authMiddleware.isAuthenticated, Order.cancelOrder);
+router.put('/cancel', authMiddleware.isAuthenticated, authMiddleware.requireUser, Order.cancelOrder);
 
 export default router;

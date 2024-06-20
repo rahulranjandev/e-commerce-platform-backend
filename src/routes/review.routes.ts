@@ -35,7 +35,7 @@ router.get('/', Review.getProductReviews);
  * @alias POST /api/v1/review?pid=productId
  * @query ?pid=productId
  */
-router.post('/', authMiddleware.isAuthenticated, Review.createProductReview);
+router.post('/', authMiddleware.isAuthenticated, authMiddleware.requireUser, Review.createProductReview);
 
 /**
  * @description Update Review - /api/v1/review/:reviewId - Private Routes
@@ -43,7 +43,7 @@ router.post('/', authMiddleware.isAuthenticated, Review.createProductReview);
  * @alias PUT /api/v1/review/:reviewId
  * @params reviewId
  */
-router.put('/:reviewId', authMiddleware.isAuthenticated, Review.updateProductReview);
+router.put('/:reviewId', authMiddleware.isAuthenticated, authMiddleware.requireUser, Review.updateProductReview);
 
 /**
  * @description Delete Review - /api/v1/review/:reviewId - Private Routes
@@ -51,6 +51,6 @@ router.put('/:reviewId', authMiddleware.isAuthenticated, Review.updateProductRev
  * @alias DELETE /api/v1/review/:reviewId
  * @params reviewId
  */
-router.delete('/:reviewId', authMiddleware.isAuthenticated, Review.deleteProductReview);
+router.delete('/:reviewId', authMiddleware.isAuthenticated, authMiddleware.requireUser, Review.deleteProductReview);
 
 export default router;

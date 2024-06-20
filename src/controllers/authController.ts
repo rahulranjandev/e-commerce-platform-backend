@@ -38,7 +38,7 @@ class AuthController {
       }
 
       // Payload for JWT
-      const payloadJWT = { user: { id: newUser._id as any, admin: newUser.isAdmin } };
+      const payloadJWT = { user: { id: newUser._id as any, admin: newUser.isAdmin, email: newUser.email } };
 
       // Create token
       const _token = signedToken(payloadJWT);
@@ -82,7 +82,7 @@ class AuthController {
       if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
       // Payload for JWT
-      const payloadJWT = { user: { id: user._id, admin: user.isAdmin } };
+      const payloadJWT = { user: { id: user._id, admin: user.isAdmin, email: user.email } };
 
       // Create token
       const _token = signedToken(payloadJWT);

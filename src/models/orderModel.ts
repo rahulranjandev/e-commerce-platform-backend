@@ -15,19 +15,29 @@ interface IOrder {
     address: string;
     city: string;
     postalCode: string;
-    country: string;
+    state: string;
     phone: string;
   };
   paymentMethod: string;
   paymentResult?: {
-    id: string;
+    order_id: string;
+    payment_id: string;
+    signature: string;
     status: string;
     update_time: string;
     email_address: string;
   };
+  refundResult?: {
+    order_id: String;
+    payment_id: String;
+    refund_id: String;
+    status: String;
+    update_time: String;
+    email_address: String;
+    arn: String;
+  };
   itemsPrice: number;
   shippingPrice: number;
-  taxPrice: number;
   totalPrice: number;
   isPaid?: boolean;
   paidAt?: Date;
@@ -87,7 +97,7 @@ const orderSchema = new Schema<IOrder>(
         type: String,
         required: true,
       },
-      country: {
+      state: {
         type: String,
         required: true,
       },
@@ -97,14 +107,25 @@ const orderSchema = new Schema<IOrder>(
       },
     },
     paymentMethod: {
-      type: String,
+      type: String, // Cash, Razorpay
       required: true,
     },
     paymentResult: {
-      id: { type: String },
+      order_id: { type: String },
+      payment_id: { type: String },
+      signature: { type: String },
       status: { type: String }, // pending, completed, failed
       update_time: { type: String },
       email_address: { type: String },
+    },
+    refundResult: {
+      order_id: { type: String },
+      payment_id: { type: String },
+      refund_id: { type: String },
+      status: { type: String }, // pending, completed, failed
+      update_time: { type: String },
+      email_address: { type: String },
+      arn: { type: String },
     },
     itemsPrice: {
       type: Number,
@@ -112,11 +133,6 @@ const orderSchema = new Schema<IOrder>(
       default: 0.0,
     },
     shippingPrice: {
-      type: Number,
-      required: true,
-      default: 0.0,
-    },
-    taxPrice: {
       type: Number,
       required: true,
       default: 0.0,
