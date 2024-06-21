@@ -1,4 +1,4 @@
-import { FilterQuery, QueryOptions, UpdateQuery, Types } from 'mongoose';
+import { FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
 import { IOrder, Order } from '@models/orderModel';
 
 export class OrderService {
@@ -59,16 +59,16 @@ export class OrderService {
   }
 
   /**
-   * @description Check if user has ordered a product before reviewing
+   * @description Check if user has ordered a product, paid and delivered
    * @Access User access
    */
-  public async checkUserOrder(productId: Types.ObjectId | string | any, userId: Types.ObjectId): Promise<boolean> {
-    const OrderItem = await Order.aggregate([
-      { $match: { user: userId } },
+  public async checkUserOrder(productId: string, userId: string): Promise<boolean> {
+    const orderItems = await Order.aggregate([
+      { $match: { user: userId, status: { $in: ['delivered'] }, isPaid: true, isDelivered: true } },
       { $unwind: '$orderItems' },
       { $match: { 'orderItems.product': productId } },
     ]);
 
-    return OrderItem.length > 0;
+    return orderItems.length > 0;
   }
 }

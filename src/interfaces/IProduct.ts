@@ -1,4 +1,4 @@
-import { FilterQuery, QueryOptions, UpdateQuery, ObjectId } from 'mongoose';
+import { FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
 import { IProduct, Product } from '@models/productModel';
 
 export class ProductService {
@@ -22,7 +22,7 @@ export class ProductService {
    * @description Get Product Info
    * @Access Public access - User access
    */
-  public async getProductById(id: string | ObjectId | any): Promise<IProduct | null> {
+  public async getProductById(id: string | any): Promise<IProduct | null> {
     return await Product.findById(id).lean();
   }
 

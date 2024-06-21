@@ -1,12 +1,12 @@
-import { Schema, model, Types } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 interface IReview {
   _id?: string;
   name: string;
   rating: number;
   comment: string;
-  user: Types.ObjectId;
-  product: Types.ObjectId;
+  user: String;
+  product: String;
   createdAt?: Date;
 }
 
@@ -28,12 +28,12 @@ const reviewSchema = new Schema<IReview>(
       required: [true, 'Comment is required'],
     },
     user: {
-      type: Schema.Types.ObjectId,
+      type: String,
       ref: 'User',
       required: true,
     },
     product: {
-      type: Schema.Types.ObjectId,
+      type: String,
       ref: 'Product',
       required: true,
     },

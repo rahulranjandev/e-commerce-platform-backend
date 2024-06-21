@@ -1,14 +1,14 @@
-import { Schema, model, Types } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 interface IOrder {
   _id?: string;
-  user: Types.ObjectId;
+  user: string;
   orderItems: {
     name: string;
     qty: number;
     image: string;
     price: number;
-    product: Types.ObjectId;
+    product: string;
   }[];
   status?: string;
   shippingAddress: {
@@ -50,7 +50,7 @@ interface IOrder {
 const orderSchema = new Schema<IOrder>(
   {
     user: {
-      type: Schema.Types.ObjectId,
+      type: String,
       ref: 'User',
       required: true,
     },
@@ -73,7 +73,7 @@ const orderSchema = new Schema<IOrder>(
           required: true,
         },
         product: {
-          type: Schema.Types.ObjectId,
+          type: String,
           ref: 'Product',
           required: true,
         },
