@@ -67,6 +67,10 @@ export class ReviewService {
       { $group: { _id: '$product', avgRating: { $avg: '$rating' } } },
     ]);
 
+    if (avgRating.length === 0) {
+      return 0; // or null, depending on your preference
+    }
+
     return avgRating[0].avgRating;
   }
 

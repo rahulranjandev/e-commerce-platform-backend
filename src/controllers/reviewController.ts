@@ -4,6 +4,7 @@ import { Types } from 'mongoose';
 import { ReviewService } from '@interfaces/IReview';
 import { ProductService } from '@interfaces/IProduct';
 import { OrderService } from '@interfaces/IOrder';
+import { CreateReviewInput, UpdateReviewInput, ReviewIdInput } from '@schema/reviewSchema';
 
 export class ReviewController {
   private productService = new ProductService();
@@ -14,7 +15,6 @@ export class ReviewController {
     try {
       const productId = req.query.pid as string;
       const reviews = await this.reviewService.getReviewsByProduct(productId);
-      console.log('reviews:', reviews);
 
       return res.status(200).json({
         data: reviews,
@@ -25,13 +25,16 @@ export class ReviewController {
     }
   };
 
-  public createProductReview = async (req: Request, res: Response, next: NextFunction) => {
+  public createProductReview = async (
+    req: Request<CreateReviewInput['query'], CreateReviewInput['body']>,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       const userId = res.locals.user.id;
       const productId = req.query.pid as string;
 
       const product = await this.productService.getProductById(productId);
-      console.log('product:', product);
 
       if (!product) {
         return res.status(400).json({
@@ -40,7 +43,6 @@ export class ReviewController {
       }
 
       const hasPurchased = await this.orderService.checkUserOrder(productId, userId);
-      console.log('hasPurchased:', hasPurchased);
 
       if (!hasPurchased) {
         return res.status(400).json({
@@ -49,27 +51,25 @@ export class ReviewController {
       }
 
       const existingReview = await this.reviewService.getReviewByUser(productId, userId);
-      console.log('existingReview:', existingReview);
 
       if (existingReview) {
         return res.status(400).json({
           message: 'You have already reviewed this product',
+          date: existingReview,
         });
       }
 
       const reviewData = {
-        ...req.body,
+        rating: req.body.rating,
+        comment: req.body.comment, // Optional
         user: userId,
         product: productId,
       };
-      console.log('reviewData:', reviewData);
 
       const review = await this.reviewService.createReview(reviewData);
-      console.log('review:', review);
 
       if (review) {
         const avgRating = await this.reviewService.getAverageRating(productId);
-        console.log('avgRating:', avgRating);
 
         await this.productService.findAndUpdateProduct(
           { _id: productId },
@@ -90,7 +90,11 @@ export class ReviewController {
     }
   };
 
-  public updateProductReview = async (req: Request, res: Response, next: NextFunction) => {
+  public updateProductReview = async (
+    req: Request<UpdateReviewInput['params'], UpdateReviewInput['body']>,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       const userId = res.locals.user.id;
       const reviewId = req.params.reviewId;
@@ -142,13 +146,13 @@ export class ReviewController {
     }
   };
 
-  public deleteProductReview = async (req: Request, res: Response, next: NextFunction) => {
+  public deleteProductReview = async (req: Request<ReviewIdInput['params']>, res: Response, next: NextFunction) => {
     try {
       const userId = res.locals.user.id;
       const reviewId = req.params.reviewId;
 
-      // Validate review ID
-      const review = await this.reviewService.deleteReview(reviewId);
+      // Fetch the review to validate its existence and the user authorization
+      const review = await this.reviewService.getReviewById(reviewId);
       if (!review) {
         return res.status(400).json({
           message: 'Review does not exist',
@@ -162,11 +166,18 @@ export class ReviewController {
         });
       }
 
-      const avgRating = await this.reviewService.getAverageRating(review.product);
+      // Delete the review
+      await this.reviewService.deleteReview(reviewId);
+
+      // Recalculate the average rating for the product
+      const avgRating = (await this.reviewService.getAverageRating(review.product)) as any;
+      const newAvgRating = avgRating.length > 0 ? avgRating[0].avgRating : 0;
+
+      // Update the product with the new average rating and decrement the number of reviews
       await this.productService.findAndUpdateProduct(
         { _id: review.product },
         {
-          $set: { rating: avgRating },
+          $set: { rating: newAvgRating },
           $inc: { numReviews: -1 },
         },
         { new: true }
