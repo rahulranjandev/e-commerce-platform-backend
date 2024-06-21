@@ -171,13 +171,17 @@ export class ReviewController {
 
       // Recalculate the average rating for the product
       const avgRating = (await this.reviewService.getAverageRating(review.product)) as any;
-      const newAvgRating = avgRating.length > 0 ? avgRating[0].avgRating : 0;
+      console.log(avgRating);
+
+      // This is a big bug, avgRating is an array and not a number (depcricated the code below)
+      // const newAvgRating = avgRating.length > 0 ? avgRating[0].avgRating : 0;
+      // console.log(newAvgRating);
 
       // Update the product with the new average rating and decrement the number of reviews
       await this.productService.findAndUpdateProduct(
         { _id: review.product },
         {
-          $set: { rating: newAvgRating },
+          $set: { rating: avgRating },
           $inc: { numReviews: -1 },
         },
         { new: true }
