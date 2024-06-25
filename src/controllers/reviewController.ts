@@ -37,29 +37,23 @@ export class ReviewController {
       const product = await this.productService.getProductById(productId);
 
       if (!product) {
-        return res.status(400).json({
-          message: 'Product does not exist',
-        });
+        return res.status(400).json({ message: 'Product does not exist' });
       }
 
       const hasPurchased = await this.orderService.checkUserOrder(productId, userId);
 
       if (!hasPurchased) {
-        return res.status(400).json({
-          message: 'You have not purchased this product',
-        });
+        return res.status(400).json({ message: 'You have not purchased this product' });
       }
 
       const existingReview = await this.reviewService.getReviewByUser(productId, userId);
 
       if (existingReview) {
-        return res.status(400).json({
-          message: 'You have already reviewed this product',
-          date: existingReview,
-        });
+        return res.status(400).json({ message: 'You have already reviewed this product', date: existingReview });
       }
 
       const reviewData = {
+        name: req.body.name, // Optional
         rating: req.body.rating,
         comment: req.body.comment, // Optional
         user: userId,
@@ -129,6 +123,7 @@ export class ReviewController {
 
       // Update product rating after review update
       const avgRating = await this.reviewService.getAverageRating(review.product);
+
       await this.productService.findAndUpdateProduct(
         { _id: review.product },
         {
@@ -154,16 +149,12 @@ export class ReviewController {
       // Fetch the review to validate its existence and the user authorization
       const review = await this.reviewService.getReviewById(reviewId);
       if (!review) {
-        return res.status(400).json({
-          message: 'Review does not exist',
-        });
+        return res.status(400).json({ message: 'Review does not exist' });
       }
 
       // Check if user is authorized to delete review
       if (review.user.toString() !== userId) {
-        return res.status(403).json({
-          message: 'User not authorized to delete this review',
-        });
+        return res.status(403).json({ message: 'User not authorized to delete this review' });
       }
 
       // Delete the review
@@ -171,7 +162,6 @@ export class ReviewController {
 
       // Recalculate the average rating for the product
       const avgRating = (await this.reviewService.getAverageRating(review.product)) as any;
-      console.log(avgRating);
 
       // This is a big bug, avgRating is an array and not a number (depcricated the code below)
       // const newAvgRating = avgRating.length > 0 ? avgRating[0].avgRating : 0;

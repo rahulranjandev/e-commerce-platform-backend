@@ -2,15 +2,20 @@ import { Schema, model } from 'mongoose';
 
 interface IReview {
   _id?: string;
+  name: string;
   rating: number;
   comment?: string;
-  user: String;
-  product: String;
+  user: string;
+  product: string;
   createdAt?: Date;
 }
 
 const reviewSchema = new Schema<IReview>(
   {
+    name: {
+      type: String,
+      default: 'Anonymous, Certified Buyer',
+    },
     rating: {
       type: Number,
       required: [true, 'Rating is required'],

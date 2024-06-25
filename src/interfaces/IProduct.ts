@@ -3,6 +3,15 @@ import { IProduct, Product } from '@models/productModel';
 
 export class ProductService {
   /**
+   * @description Get Products without description
+   * @feature Get Single Image URL for each product
+   * @Access Public access
+   */
+  public async getProductsWithoutDescription(): Promise<IProduct[]> {
+    return await Product.find().select('-description').lean();
+  }
+
+  /**
    * @description Get All Products
    * @Access Public access
    */
@@ -15,7 +24,7 @@ export class ProductService {
    * @Access Public access
    */
   public async getProductByCategory(category: string): Promise<IProduct[]> {
-    return await Product.find({ category }).lean();
+    return await Product.find({ category }).select('-description').lean();
   }
 
   /**
@@ -28,10 +37,11 @@ export class ProductService {
 
   /**
    * @description Get Product Info - Public Access
-   * @Access User access
+   * @feature Filter the product by query
+   * @Access Public access
    */
   public async getProductByQuery(query: FilterQuery<IProduct>): Promise<IProduct | null> {
-    return await Product.findOne(query as FilterQuery<IProduct>);
+    return await Product.find(query).select('-description').lean();
   }
 
   /**
