@@ -1,0 +1,66 @@
+version: '3'
+
+services:
+  api-server:
+    build:
+      context: .
+    container_name: e-commerce-api-server
+    image: e-commerce-api-server
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - '3000:3333'
+    networks:
+      - app-network
+
+  nginx-server:
+    image: nginx:latest
+    container_name: nginx-server
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - web-root:/var/www/html
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/server.conf:/etc/nginx/conf.d/default.conf
+      # - ./nginx/server-certbot.conf:/etc/nginx/conf.d/default.conf
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - dhparam:/etc/ssl/certs
+    depends_on:
+      - api-server
+    networks:
+      - app-network
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+    depends_on:
+      - nginx-server
+    command: certonly --webroot --webroot-path=/var/www/html --email rahulranjan@bitwisebeat.tech --agree-tos --no-eff-email --force-renewal -d store.bitwisebeat.tech
+
+volumes:
+  certbot-etc:
+  certbot-var:
+  web-root:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/ubuntu/Ecommerce-Platform-Backend/views/
+      o: bind
+  dhparam:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/ubuntu/Ecommerce-Platform-Backend/dhparam/
+      o: bind
+
+networks:
+  app-network:
+    driver: bridge
