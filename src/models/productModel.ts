@@ -6,12 +6,13 @@ interface IProduct {
   description: string;
   price: number;
   category: string[];
-  brand: string;
+  brand?: string;
   countInStock: number;
   rating?: number;
   numReviews?: number;
   image: string[];
   createdAt?: Date;
+  embeddings?: number[];
 }
 
 const productSchema = new Schema<IProduct>(
@@ -35,7 +36,6 @@ const productSchema = new Schema<IProduct>(
     },
     brand: {
       type: String,
-      required: [true, 'Brand is required'],
     },
     countInStock: {
       type: Number,
@@ -53,6 +53,9 @@ const productSchema = new Schema<IProduct>(
     image: {
       type: [String],
       required: [true, 'Image is required'],
+    },
+    embeddings: {
+      type: [Number],
     },
     createdAt: {
       type: Date,
