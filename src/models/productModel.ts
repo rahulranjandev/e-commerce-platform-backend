@@ -12,6 +12,7 @@ interface IProduct {
   numReviews?: number;
   image: string[];
   createdAt?: Date;
+  embeddings?: number[];
 }
 
 const productSchema = new Schema<IProduct>(
@@ -52,6 +53,9 @@ const productSchema = new Schema<IProduct>(
     image: {
       type: [String],
       required: [true, 'Image is required'],
+    },
+    embeddings: {
+      type: [Number],
     },
     createdAt: {
       type: Date,

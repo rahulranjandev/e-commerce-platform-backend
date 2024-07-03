@@ -10,9 +10,9 @@ export const deleteDump = async () => {
     await connectDB();
 
     // await User.deleteMany({});
-    // await Product.deleteMany({});
-    // await Review.deleteMany({});
-    // await Order.deleteMany({});
+    await Product.deleteMany({});
+    await Review.deleteMany({});
+    await Order.deleteMany({});
 
     console.log('Data deleted successfully');
   } catch (error) {
