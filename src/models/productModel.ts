@@ -6,7 +6,7 @@ interface IProduct {
   description: string;
   price: number;
   category: string[];
-  brand: string;
+  brand?: string;
   countInStock: number;
   rating?: number;
   numReviews?: number;
@@ -35,7 +35,6 @@ const productSchema = new Schema<IProduct>(
     },
     brand: {
       type: String,
-      required: [true, 'Brand is required'],
     },
     countInStock: {
       type: Number,
