@@ -7,7 +7,11 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import cron from 'node-cron';
 import { connectDB } from '@utils/connectDB';
+<<<<<<< HEAD:src/app.ts
 import { checkAndGenerateEmbeddings, generateEmbeddings } from '@utils/generateEmbeddings';
+=======
+import { checkAndGenerateEmbeddings } from '@utils/generateEmbeddings';
+>>>>>>> main:src/app.ts
 import { PORT, NODE_ENV } from '@config';
 
 import router from '@routes/index';
@@ -78,7 +82,11 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 
 // Cron Job to check for new data and generate embeddings
 cron.schedule(
+<<<<<<< HEAD:src/app.ts
   '* * * * *',
+=======
+  '0 0 * * *',
+>>>>>>> main:src/app.ts
   () => {
     console.log('Running cron job to check for new data and generate embeddings');
     checkAndGenerateEmbeddings();

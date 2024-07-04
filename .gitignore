@@ -379,8 +379,7 @@ pip-selfcheck.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python,venv
 
-# File and directory names to ignore
+# User-specific files
 data/*
-nginx-conf/*
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,node,dotenv,git
