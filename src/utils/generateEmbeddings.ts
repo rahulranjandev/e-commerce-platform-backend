@@ -2,64 +2,81 @@
 // 1. Load the data from the database
 // 2. Generate embeddings for the data
 // 3. Store the embeddings in the database
+// 4. Periodically update the embeddings based on new data
 
-// Using Python Script to Generate Embeddings
-// File: generate_embeddings.py
+// Cron Job to Run the Periodically to Update the Embeddings
 
-// To Run the Script: python generate_embeddings.py
-// Use Child Process to Run the Python Script from Node.js Code
-// Cron Job to Run the Script Periodically to Update the Embeddings
-// File: generateEmbeddings.ts
-
-import { spawn } from 'child_process';
 import { connectDB } from './connectDB';
 import { Product } from '../models/productModel';
+import axios from 'axios';
 
-// Function to Generate Embeddings
+// Axios Configuration
+const instance = axios.create({
+  baseURL: 'http://127.0.0.1:3001', // For local development
+  // baseURL: 'http://localhost:3001', // For Production
+  headers: { 'Content-Type': 'application/json' },
+});
+
+// Function to Generate Embeddings using axios
 const generateEmbeddings = async () => {
   try {
-    // For development
-    const pythonProcess = spawn('python', ['src/utils/generate_embeddings.py']);
-    // For production
-    // const pythonProcess = spawn('python', ['dist/src/utils/generate_embeddings.py']);
+    // Make a POST request to the Python-Flask API to generate embeddings
+    const response = await instance.post('/encode', {});
 
-    pythonProcess.stdout.on('data', (data) => {
-      console.log(`Python script output: ${data}`);
-    });
+    if (response.status !== 200) {
+      throw new Error('Failed to generate embeddings');
+    }
 
-    pythonProcess.stderr.on('data', (data) => {
-      console.error(`Python script error: ${data}`);
-    });
-
-    pythonProcess.on('close', (code) => {
-      if (code === 0) {
-        console.log('Python script exited successfully.');
-      } else {
-        console.error(`Python script exited with code: ${code}`);
-      }
-    });
+    console.log('Embeddings generated and stored successfully.');
   } catch (error) {
     console.error('Error spawning Python process:', error);
   }
 };
 
-// Check the Database have New Data
-// If Yes, Generate Embeddings
-// If No, Do Nothing
+// Function to Delete Embeddings
+const deleteEmbeddings = async () => {
+  try {
+    const response = await instance.post('/delete', {});
+
+    if (response.status !== 200) {
+      throw new Error('Failed to delete embeddings');
+    }
+
+    console.log('Embeddings deleted successfully.');
+  } catch (error) {
+    console.error('Error deleting embeddings:', error);
+  }
+};
+
+// Function to Get Embeddings
+const generate_vectors = async (data: any) => {
+  try {
+    // Send data in JSON format to the Python-Flask API
+    const payload = JSON.stringify(data);
+
+    const response = await instance.post('/generate_vectors', { payload });
+
+    if (response.status !== 200) {
+      throw new Error('Failed to get embeddings');
+    }
+
+    return response.data.embeddings;
+  } catch (error) {
+    console.error('Error getting embeddings:', error);
+  }
+};
 
 // Function to check for new data and generate embeddings
 const checkAndGenerateEmbeddings = async () => {
   try {
     await connectDB();
-    let newRecords = false;
+    // Query for records with recent created_at timestamp or without embeddings generated
 
-    // Implement your logic to check for new data in the database
-    // This could involve querying for records with a "created_at" timestamp
-    // or a flag indicating if embeddings are generated.
-    const hasNewData = await Product.find({ embeddings: { $exists: false } });
+    // const newData = await Product.find({ createdAt: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) } });
+    const newDataLastMinute = await Product.find({ createdAt: { $gt: new Date(Date.now() - 1 * 60 * 1000) } });
+    // const newDataLastFiveMinutes = await Product.find({ createdAt: { $gt: new Date(Date.now() - 5 * 60 * 1000) } });
 
-    if (hasNewData) {
-      newRecords = true;
+    if (newDataLastMinute.length > 0) {
       console.log('New data found. Generating embeddings...');
       generateEmbeddings();
     } else {
@@ -74,4 +91,4 @@ const checkAndGenerateEmbeddings = async () => {
 // checkAndGenerateEmbeddings();
 // generateEmbeddings();
 
-export { checkAndGenerateEmbeddings, generateEmbeddings };
+export { checkAndGenerateEmbeddings, generateEmbeddings, deleteEmbeddings, generate_vectors };

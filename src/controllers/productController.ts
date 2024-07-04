@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import { ProductService } from '@interfaces/IProduct';
 import { uploadToAzure, uploadMultipleFiles, getAzureBlobUrl, deleteFromAzure } from '@utils/azureUpload';
 import { sanitizeFilename } from '@utils/slugify';
+import { generate_vectors } from '@utils/generateEmbeddings';
 import {
   CreateProductInput,
   ProductByCategoryInput,
@@ -162,9 +163,16 @@ export class ProductController {
         image: imageUrls,
       };
 
-      console.log('payload: ', productData);
+      // Generate Vector Embeddings for the product description using Python-Flask API
+      const embeddings = await generate_vectors(productData.description);
 
-      const product = await this.productService.createProduct(productData);
+      // Add the embeddings to the product data
+      const _productData = {
+        ...productData,
+        embeddings: embeddings,
+      };
+
+      const product = await this.productService.createProduct(_productData);
 
       return res.status(201).json({
         data: product,
