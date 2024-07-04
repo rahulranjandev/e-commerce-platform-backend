@@ -17,7 +17,14 @@ export const dumpProducts = async () => {
   try {
     await connectDB();
 
-    const response = await axios.get<{ products: IProductResponse[] }>('https://dummyjson.com/products');
+    // Pagination
+    const limit = 30;
+    const skip = 0;
+
+    const dummyjsonURL = `https://dummyjson.com/products?limit=${limit}&skip=${skip}`;
+    console.log(dummyjsonURL);
+
+    const response = await axios.get<{ products: IProductResponse[] }>(dummyjsonURL);
 
     const products = response.data.products;
 
