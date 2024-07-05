@@ -193,6 +193,7 @@ dist
 # Created by https://www.toptal.com/developers/gitignore/api/python,venv
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,venv
 
+<<<<<<< HEAD:.gitignore
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -379,6 +380,8 @@ pip-selfcheck.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python,venv
 
+=======
+>>>>>>> main:.gitignore
 # User-specific files
 data/*
 
