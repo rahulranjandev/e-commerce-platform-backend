@@ -12,13 +12,8 @@ import axios from 'axios';
 
 // Axios Configuration
 const instance = axios.create({
-<<<<<<< HEAD:src/utils/generateEmbeddings.ts
-  baseURL: 'http://127.0.0.1:3001', // For local development
-  // baseURL: 'http://localhost:3001', // For Production
-=======
   // baseURL: 'http://127.0.0.1:3001', // For local development
   baseURL: 'http://172.18.0.4:7860', // For Production
->>>>>>> main:src/utils/generateEmbeddings.ts
   headers: { 'Content-Type': 'application/json' },
 });
 
