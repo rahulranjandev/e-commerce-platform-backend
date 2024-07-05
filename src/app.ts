@@ -78,7 +78,11 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 
 // Cron Job to check for new data and generate embeddings
 cron.schedule(
+<<<<<<< HEAD:src/app.ts
   '0 0 * * *',
+=======
+  '*/5 * * * *',
+>>>>>>> main:src/app.ts
   () => {
     console.log('Running cron job to check for new data and generate embeddings');
     checkAndGenerateEmbeddings();

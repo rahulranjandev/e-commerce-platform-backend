@@ -11,9 +11,11 @@ import orderRoutes from './order.routes';
 
 import { AuthController } from '@controllers/authController';
 import { PasswdController } from '@/controllers/passwdController';
+import { VectorSearchController } from '@controllers/vSearchController';
 
 const Auth = new AuthController();
 const Password = new PasswdController();
+const VectorSearch = new VectorSearchController();
 
 /**
  * @description Status Routes - / - Public Routes
@@ -53,6 +55,15 @@ router.get('/verify/:token', Auth.confirmEmail);
  * @body    password (new password) and resettoken
  */
 router.post('/resetpassword/:resttoken', Password.resetPassword);
+
+/**
+ * @alias   POST /api/v1/vsearch
+ * @desc    Vector Search
+ * @access  Public
+ * @body    vs (search query)
+ * @usage   http://localhost:5000/api/v1/vsearch?vs=product
+ */
+router.post('/vsearch', VectorSearch.vectorSearch);
 
 /**
  * @description Auth Routes - /api/auth - Public Routes
