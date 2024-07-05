@@ -14,6 +14,12 @@ services:
     networks:
       - app-network
 
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/health']
+      interval: 45s
+      timeout: 5s
+      retries: 5
+
   nginx-server:
     image: nginx:latest
     container_name: nginx-server
@@ -33,6 +39,12 @@ services:
       - api-server
     networks:
       - app-network
+
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost/health']
+      interval: 45s
+      timeout: 5s
+      retries: 5
 
   certbot:
     image: certbot/certbot
