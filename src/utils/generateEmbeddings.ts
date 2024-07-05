@@ -7,22 +7,13 @@
 // Cron Job to Run the Periodically to Update the Embeddings
 
 import { connectDB } from './connectDB';
-<<<<<<< HEAD:src/utils/generateEmbeddings.ts
-import { Product } from '../models/productModel';
-=======
 import { Product } from '@/models/productModel';
->>>>>>> main:src/utils/generateEmbeddings.ts
 import axios from 'axios';
 
 // Axios Configuration
 const instance = axios.create({
-<<<<<<< HEAD:src/utils/generateEmbeddings.ts
-  // baseURL: 'http://127.0.0.1:3001', // For local development
+  // baseURL: 'http://127.0.0.1:7860', // For local development
   baseURL: 'http://172.18.0.4:7860', // For Production
-=======
-  baseURL: 'http://127.0.0.1:7860', // For local development
-  // baseURL: 'http://172.18.0.4:7860', // For Production
->>>>>>> main:src/utils/generateEmbeddings.ts
   headers: { 'Content-Type': 'application/json' },
 });
 
@@ -82,19 +73,10 @@ const checkAndGenerateEmbeddings = async () => {
     // Query for records with recent created_at timestamp or without embeddings generated
 
     // const newData = await Product.find({ createdAt: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) } });
-<<<<<<< HEAD:src/utils/generateEmbeddings.ts
-    const newDataLastMinute = await Product.find({ createdAt: { $gt: new Date(Date.now() - 1 * 60 * 1000) } });
-    // const newDataLastFiveMinutes = await Product.find({ createdAt: { $gt: new Date(Date.now() - 5 * 60 * 1000) } });
-=======
     // const newDataLastMinute = await Product.find({ createdAt: { $gt: new Date(Date.now() - 1 * 60 * 1000) } });
     const newDataLastFiveMinutes = await Product.find({ createdAt: { $gt: new Date(Date.now() - 5 * 60 * 1000) } });
->>>>>>> main:src/utils/generateEmbeddings.ts
 
-<<<<<<< HEAD:src/utils/generateEmbeddings.ts
-    if (newDataLastMinute.length > 0) {
-=======
     if (newDataLastFiveMinutes.length > 0) {
->>>>>>> main:src/utils/generateEmbeddings.ts
       console.log('New data found. Generating embeddings...');
       generateEmbeddings();
     } else {
