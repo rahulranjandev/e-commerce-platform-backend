@@ -14,12 +14,6 @@ services:
     networks:
       - app-network
 
-    healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:3333/health']
-      interval: 45s
-      timeout: 5s
-      retries: 5
-
   nginx-server:
     image: nginx:latest
     container_name: nginx-server
