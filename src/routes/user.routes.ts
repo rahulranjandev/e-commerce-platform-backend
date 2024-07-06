@@ -15,9 +15,9 @@ const onlyAdminAccess = new OnlyAdminAccess();
 const User = new UserController();
 
 /**
- * @description Get User - /api/v1/user - Private Routes
+ * @description Get User - /api/user - Private Routes
  * @access User Access - Private
- * @alias GET /api/v1/user
+ * @alias GET /api/user
  */
 router.get(
   '/',
@@ -29,9 +29,9 @@ router.get(
 );
 
 /**
- * @description Update User - /api/v1/user - Private Routes
+ * @description Update User - /api/user - Private Routes
  * @access User Access - Private
- * @alias PUT /api/v1/user
+ * @alias PUT /api/user
  */
 router.put(
   '/',
@@ -44,9 +44,9 @@ router.put(
 );
 
 /**
- * @description Delete User - /api/v1/user/:id - Private Routes
+ * @description Delete User - /api/user/:id - Private Routes
  * @access Admin Access - Private
- * @alias DELETE /api/v1/user/:id
+ * @alias DELETE /api/user/:id
  * @params id
  */
 router.delete(

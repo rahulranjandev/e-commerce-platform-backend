@@ -22,32 +22,32 @@ const onlyAdminAccess = new OnlyAdminAccess();
 const Product = new ProductController();
 
 /**
- * @description Get Product - /api/v1/product - Public Routes
+ * @description Get Product - /api/product - Public Routes
  * @access Public
- * @alias GET /api/v1/product
+ * @alias GET /api/product
  */
 router.get('/', Product.getProducts);
 
 /**
- * @description Get Product By Category - /api/v1/product/category/:category - Public Routes
+ * @description Get Product By Category - /api/product/category/:category - Public Routes
  * @access Public
- * @alias GET /api/v1/product/category/:category
+ * @alias GET /api/product/category/:category
  * @params category
  */
 router.get('/category/:category', validateSchema(ProductByCategorySchema), Product.getProductByCategory);
 
 /**
- * @description Get Product - /api/v1/product/:id - Public Routes
+ * @description Get Product - /api/product/:id - Public Routes
  * @access Public
- * @alias GET /api/v1/product/:id
+ * @alias GET /api/product/:id
  * @params id
  */
 router.get('/:productId', validateSchema(ProductByIdSchema), Product.getProductById);
 
 /**
- * @description Create Product - /api/v1/product - Private Routes
+ * @description Create Product - /api/product - Private Routes
  * @access Admin Access - Private
- * @alias POST /api/v1/product
+ * @alias POST /api/product
  */
 router.post(
   '/',
@@ -62,9 +62,9 @@ router.post(
 );
 
 /**
- * @description Update Product - /api/v1/product/:id - Private Routes
+ * @description Update Product - /api/product/:id - Private Routes
  * @access Admin Access - Private
- * @alias PUT /api/v1/product/:id
+ * @alias PUT /api/product/:id
  * @params id
  */
 router.put(
@@ -80,9 +80,9 @@ router.put(
 );
 
 /**
- * @description Delete Product - /api/v1/product/:id - Private Routes
+ * @description Delete Product - /api/product/:id - Private Routes
  * @access Admin Access - Private
- * @alias DELETE /api/v1/product/:id
+ * @alias DELETE /api/product/:id
  * @params id
  */
 router.delete(

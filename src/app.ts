@@ -58,6 +58,11 @@ app.use(helmet());
 // Main Routes
 app.use('/', router);
 
+// Favicon.ico
+app.get('/favicon.ico', (req: Request, res: Response) => {
+  return res.sendFile(path.join(__dirname, 'favicon.ico'));
+});
+
 // UnKnown Routes
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
   const err = new Error(`Route ${req.originalUrl} not found`) as any;

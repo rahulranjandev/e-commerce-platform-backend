@@ -15,9 +15,9 @@ const onlyAdminAccess = new OnlyAdminAccess();
 const Review = new ReviewController();
 
 /**
- * @description Get Product Reviews - /api/v1/review - AdminAccess
+ * @description Get Product Reviews - /api/review - AdminAccess
  * @access Admin Access - Private
- * @alias GET /api/v1/review?pid=productId
+ * @alias GET /api/review?pid=productId
  * @query ?pid=productId
  */
 router.get(
@@ -31,18 +31,18 @@ router.get(
 );
 
 /**
- * @description Get Review - /api/v1/review/:id - Public Routes
+ * @description Get Review - /api/review/:id - Public Routes
  * @access Public
- * @alias GET /api/v1/review/:id
+ * @alias GET /api/review/:id
  * @params id
  * @todo Implement getReviewById
  */
 // router.get('/:id', Review.getReviewById);
 
 /**
- * @description Create Review - /api/v1/review - Private Routes
+ * @description Create Review - /api/review - Private Routes
  * @access User Access - Private
- * @alias POST /api/v1/review?pid=productId
+ * @alias POST /api/review?pid=productId
  * @query ?pid=productId
  */
 router.post(
@@ -56,9 +56,9 @@ router.post(
 );
 
 /**
- * @description Update Review - /api/v1/review/:reviewId - Private Routes
+ * @description Update Review - /api/review/:reviewId - Private Routes
  * @access User Access - Private
- * @alias PUT /api/v1/review/:reviewId
+ * @alias PUT /api/review/:reviewId
  * @params reviewId
  */
 router.put(
@@ -72,9 +72,9 @@ router.put(
 );
 
 /**
- * @description Delete Review - /api/v1/review/:reviewId - Private Routes
+ * @description Delete Review - /api/review/:reviewId - Private Routes
  * @access User Access - Private
- * @alias DELETE /api/v1/review/:reviewId
+ * @alias DELETE /api/review/:reviewId
  * @params reviewId
  */
 router.delete(

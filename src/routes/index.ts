@@ -49,7 +49,7 @@ router.get('/confirm/:token', Auth.confirmEmail);
 router.get('/verify/:token', Auth.confirmEmail);
 
 /**
- * @alias   PUT /api/v1/auth/resetpassword/:resettoken
+ * @alias   PUT /api/auth/resetpassword/:resettoken
  * @desc    Reset password
  * @access  Public
  * @body    password (new password) and resettoken
@@ -57,11 +57,11 @@ router.get('/verify/:token', Auth.confirmEmail);
 router.post('/resetpassword/:resttoken', Password.resetPassword);
 
 /**
- * @alias   POST /api/v1/vsearch
+ * @alias   POST /api/vsearch
  * @desc    Vector Search
  * @access  Public
  * @body    vs (search query)
- * @usage   http://localhost:5000/api/v1/vsearch?vs=product
+ * @usage   http://localhost:5000/api/vsearch?vs=product
  */
 router.post('/vsearch', VectorSearch.vectorSearch);
 

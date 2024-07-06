@@ -16,7 +16,7 @@ const Auth = new AuthController();
 const Password = new PasswdController();
 
 /**
- * @alias   POST /api/v1/auth/register
+ * @alias   POST /api/auth/register
  * @desc    Register user
  * @access  Public
  * @body    name, email and password
@@ -24,7 +24,7 @@ const Password = new PasswdController();
 router.post('/register', validateSchema(registerUserSchema), Auth.register);
 
 /**
- * @alias   POST /api/v1/auth/login
+ * @alias   POST /api/auth/login
  * @desc    Login user
  * @access  Public
  * @body    email and password
@@ -32,7 +32,7 @@ router.post('/register', validateSchema(registerUserSchema), Auth.register);
 router.post('/login', validateSchema(loginUserSchema), Auth.login);
 
 /**
- * @alias   POST /api/v1/auth/forgotpassword
+ * @alias   POST /api/auth/forgotpassword
  * @desc    Forgot password
  * @access  Public
  * @body    email
@@ -40,7 +40,7 @@ router.post('/login', validateSchema(loginUserSchema), Auth.login);
 router.post('/forgotpassword', validateSchema(forgetPasswordSchema), Password.forgotPassword);
 
 /**
- * @alias   GET /api/v1/auth/changepassword
+ * @alias   GET /api/auth/changepassword
  * @desc    Change password
  * @access  Private
  * @body    password (old password) and newpassword
@@ -48,7 +48,7 @@ router.post('/forgotpassword', validateSchema(forgetPasswordSchema), Password.fo
 router.get('/changepassword', authMiddleware.isAuthenticated, authMiddleware.requireUser, Password.changePassword);
 
 /**
- * @alias   GET /api/v1/auth/logout
+ * @alias   GET /api/auth/logout
  * @desc    Logout user
  * @access  Private
  */
