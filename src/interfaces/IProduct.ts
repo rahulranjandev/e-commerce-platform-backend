@@ -8,7 +8,7 @@ export class ProductService {
    * @Access Public access
    */
   public async getProductsWithoutDescription(): Promise<IProduct[]> {
-    return await Product.find().select('-description').select('-embeddings').lean();
+    return await Product.find().select('-image').select('-description').select('-embeddings').lean();
   }
 
   /**
@@ -24,7 +24,7 @@ export class ProductService {
    * @Access Public access
    */
   public async getProductByCategory(category: string): Promise<IProduct[]> {
-    return await Product.find({ category }).select('-description').select('-embeddings').lean();
+    return await Product.find({ category }).select('-image').select('-description').select('-embeddings').lean();
   }
 
   /**
@@ -41,7 +41,7 @@ export class ProductService {
    * @Access Public access
    */
   public async getProductByQuery(query: FilterQuery<IProduct>): Promise<IProduct | null> {
-    return await Product.find(query).select('-description').select('-embeddings').lean();
+    return await Product.find(query).select('-image').select('-description').select('-embeddings').lean();
   }
 
   /**

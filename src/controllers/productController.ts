@@ -18,16 +18,8 @@ export class ProductController {
     try {
       const products = await this.productService.getProductsWithoutDescription();
 
-      // Transform the products to include only the first image URL
-      const result = products.map((product) => {
-        return {
-          ...product,
-          image: product.image && product.image.length > 0 ? product.image[0] : null,
-        };
-      });
-
       return res.status(200).json({
-        data: result,
+        data: products,
       });
     } catch (err: any) {
       res.status(500).send('Internal Server Error');
@@ -49,16 +41,8 @@ export class ProductController {
         });
       }
 
-      // Transform the products to include only the first image URL
-      const result = products.map((product) => {
-        return {
-          ...product,
-          image: product.image && product.image.length > 0 ? product.image[0] : null,
-        };
-      });
-
       return res.status(200).json({
-        data: result,
+        data: products,
       });
     } catch (err: any) {
       res.status(500).send('Internal Server Error');

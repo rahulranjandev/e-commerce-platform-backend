@@ -10,6 +10,7 @@ interface IProductResponse {
   description: string;
   category: string;
   images: string[];
+  thumbnail: string;
   stock: number;
 }
 
@@ -36,6 +37,7 @@ export const dumpProducts = async () => {
         description: product.description,
         category: product.category,
         image: product.images,
+        thumbnail: product.thumbnail,
         countInStock: product.stock,
       };
     });
