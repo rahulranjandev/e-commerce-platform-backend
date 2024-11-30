@@ -13,7 +13,7 @@ import axios from 'axios';
 // Axios Configuration
 const instance = axios.create({
   // baseURL: 'http://127.0.0.1:7860', // For local development
-  baseURL: 'http://172.18.0.4:7860', // For Production
+  baseURL: 'https://falcon.bytesbeat.tech', // For Production
   headers: { 'Content-Type': 'application/json' },
 });
 
