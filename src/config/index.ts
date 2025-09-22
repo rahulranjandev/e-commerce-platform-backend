@@ -14,6 +14,7 @@ export const {
   PORT,
   MONGODB_URL,
   JWT_SECRET,
+  VECTORS_BACKEND_URL,
   AZURE_STORAGE_CONNECTION_STRING,
   AZURE_STORAGE_ACCOUNT_NAME,
   AZURE_STORAGE_ACCOUNT_KEY,
@@ -42,6 +43,10 @@ if (!MONGODB_URL) {
 
 if (!JWT_SECRET) {
   throw new Error('JWT_SECRET is missing');
+}
+
+if (!VECTORS_BACKEND_URL) {
+  throw new Error('VECTORS_BACKEND_URL is missing');
 }
 
 if (!ACCESS_TOKEN_PRIVATE_KEY) {

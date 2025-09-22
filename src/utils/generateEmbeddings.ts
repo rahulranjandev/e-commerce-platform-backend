@@ -6,14 +6,14 @@
 
 // Cron Job to Run the Periodically to Update the Embeddings
 
+import axios from 'axios';
 import { connectDB } from './connectDB';
 import { Product } from '@/models/productModel';
-import axios from 'axios';
+import { VECTORS_BACKEND_URL } from '@config';
 
 // Axios Configuration
 const instance = axios.create({
-  // baseURL: 'http://127.0.0.1:7860', // For local development
-  baseURL: 'https://falcon.bytesbeat.tech', // For Production
+  baseURL: VECTORS_BACKEND_URL,
   headers: { 'Content-Type': 'application/json' },
 });
 

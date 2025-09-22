@@ -41,7 +41,7 @@ export class ProductService {
    * @Access Public access
    */
   public async getProductByQuery(query: FilterQuery<IProduct>): Promise<IProduct | null> {
-    return await Product.find(query).select('-image').select('-description').select('-embeddings').lean();
+    return (await Product.find(query).select('-image').select('-description').select('-embeddings').lean()) as any;
   }
 
   /**
