@@ -64,8 +64,8 @@ const createHttpClient = (baseURL: string): AxiosInstance => {
       // Normalize error response
       const apiError = new ApiError(
         error.response?.status || 500,
-        error.response?.data?.message || error.message || "An error occurred",
-        error.response?.data?.errors
+        (error.response?.data as any)?.message || error.message || "An error occurred",
+        (error.response?.data as any)?.errors
       )
 
       return Promise.reject(apiError)

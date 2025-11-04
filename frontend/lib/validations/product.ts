@@ -21,9 +21,10 @@ export const addressSchema = z.object({
 
 export const checkoutSchema = z.object({
   shippingAddress: addressSchema,
-  paymentMethod: z.enum(["Razorpay", "Cash"], {
-    required_error: "Please select a payment method",
-  }),
+  paymentMethod: z.string().refine(
+    (val) => val === "Razorpay" || val === "Cash",
+    { message: "Please select a valid payment method" }
+  ),
 })
 
 export type ProductInput = z.infer<typeof productSchema>
