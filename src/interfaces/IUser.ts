@@ -1,4 +1,4 @@
-import { FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
+import { QueryFilter, QueryOptions, UpdateQuery } from 'mongoose';
 import { IUser, User } from '@models/userModel';
 
 export class UserService {
@@ -22,8 +22,8 @@ export class UserService {
    * @description Get User Info
    * @Access User access - Protected
    */
-  public async getUserByQuery(query: FilterQuery<IUser>): Promise<IUser | null> {
-    return await User.findOne(query as FilterQuery<IUser>)
+  public async getUserByQuery(query: QueryFilter<IUser>): Promise<IUser | null> {
+    return await User.findOne(query as QueryFilter<IUser>)
       .select('-password')
       .select('-token');
   }
@@ -48,7 +48,7 @@ export class UserService {
    * @description Update User - User access only
    * @Access User access - Protected
    */
-  public async findAndUpdateUser(query: FilterQuery<IUser>, update: UpdateQuery<IUser>, options: QueryOptions) {
+  public async findAndUpdateUser(query: QueryFilter<IUser>, update: UpdateQuery<IUser>, options: QueryOptions) {
     return await User.findOneAndUpdate(query, update, options);
   }
 

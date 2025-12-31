@@ -2,21 +2,21 @@ import { z } from 'zod';
 
 export const registerUserSchema = z.object({
   body: z.object({
-    name: z.string({ required_error: 'Name is required' }).min(3).max(50),
-    email: z.string({ required_error: 'Email is required' }).email({ message: 'Invalid email' }),
+    name: z.string({ error: 'Name is required' }).min(3).max(50),
+    email: z.email({ error: 'Email is required' }),
     password: z
-      .string({ required_error: 'Password is required' })
+      .string({ error: 'Password is required' })
       .min(6, `Password must be more than 6 character's`)
       .max(50, `Password must be less than 50 character's`),
-    avatar: z.string().url({ message: 'Invalid URL' }).optional(),
+    avatar: z.url({ message: 'Invalid URL' }).optional(),
   }),
 });
 
 export const loginUserSchema = z.object({
   body: z.object({
-    email: z.string({ required_error: 'Email is required' }).email({ message: 'Invalid email' }),
+    email: z.email({ error: 'Email is required' }),
     password: z
-      .string({ required_error: 'Password is required' })
+      .string({ error: 'Password is required' })
       .min(6, `Password must be more than 6 character's`)
       .max(50, `Password must be less than 50 character's`),
   }),
@@ -24,26 +24,22 @@ export const loginUserSchema = z.object({
 
 export const updateUserSchema = z.object({
   body: z.object({
-    email: z.string().email({ message: 'Invalid email' }).optional(),
+    email: z.email({ error: 'Email is required' }).optional(),
     password: z
       .string()
       .min(6, `Password must be more than 6 character's`)
       .max(50, `Password must be less than 50 character's`)
       .optional(),
-    avatar: z.string().url({ message: 'Invalid URL' }).optional(),
+    avatar: z.url({ message: 'Invalid URL' }).optional(),
   }),
 });
 
-export const forgetPasswordSchema = z.object({
-  body: z.object({
-    email: z.string({ required_error: 'Email is required' }).email({ message: 'Invalid email' }),
-  }),
-});
+export const forgetPasswordSchema = z.object({ body: z.object({ email: z.email({ error: 'Email is required' }) }) });
 
 export const resetPasswordSchema = z.object({
   body: z.object({
     password: z
-      .string({ required_error: 'Password is required' })
+      .string({ error: 'Password is required' })
       .min(6, `Password must be more than 6 character's`)
       .max(50, `Password must be less than 50 character's`),
   }),

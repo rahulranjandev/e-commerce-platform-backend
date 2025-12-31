@@ -4,25 +4,25 @@ const createOrderSchema = z.object({
   body: z.object({
     orderItems: z.array(
       z.object({
-        name: z.string({ required_error: 'Name is required' }),
-        qty: z.number({ required_error: 'Quantity is required' }),
-        image: z.string({ required_error: 'Image is required' }),
-        price: z.number({ required_error: 'Price is required' }),
-        product: z.string({ required_error: 'Product is required' }),
+        name: z.string({ error: 'Name is required' }),
+        qty: z.number({ error: 'Quantity is required' }),
+        image: z.string({ error: 'Image is required' }),
+        price: z.number({ error: 'Price is required' }),
+        product: z.string({ error: 'Product is required' }),
       })
     ),
     shippingAddress: z.object({
-      address: z.string({ required_error: 'Address is required' }),
-      city: z.string({ required_error: 'City is required' }),
-      postalCode: z.string({ required_error: 'Postal code is required' }),
-      country: z.string({ required_error: 'Country is required' }),
-      phone: z.string({ required_error: 'Phone is required' }),
+      address: z.string({ error: 'Address is required' }),
+      city: z.string({ error: 'City is required' }),
+      postalCode: z.string({ error: 'Postal code is required' }),
+      country: z.string({ error: 'Country is required' }),
+      phone: z.string({ error: 'Phone is required' }),
     }),
-    paymentMethod: z.string({ required_error: 'Payment method is required' }),
-    itemsPrice: z.number({ required_error: 'Items price is required' }),
-    taxPrice: z.number({ required_error: 'Tax price is required' }),
-    shippingPrice: z.number({ required_error: 'Shipping price is required' }),
-    totalPrice: z.number({ required_error: 'Total price is required' }),
+    paymentMethod: z.string({ error: 'Payment method is required' }),
+    itemsPrice: z.number({ error: 'Items price is required' }),
+    taxPrice: z.number({ error: 'Tax price is required' }),
+    shippingPrice: z.number({ error: 'Shipping price is required' }),
+    totalPrice: z.number({ error: 'Total price is required' }),
   }),
 });
 

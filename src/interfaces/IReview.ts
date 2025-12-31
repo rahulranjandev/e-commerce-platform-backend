@@ -1,4 +1,4 @@
-import { FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
+import { QueryFilter, QueryOptions, UpdateQuery } from 'mongoose';
 import { IReview, Review } from '@models/reviewModel';
 
 export class ReviewService {
@@ -21,8 +21,8 @@ export class ReviewService {
    * @description Get Review Info - Public Access
    * @Access User access
    */
-  public async getReviewByQuery(query: FilterQuery<IReview>): Promise<IReview | null> {
-    return await Review.findOne(query as FilterQuery<IReview>);
+  public async getReviewByQuery(query: QueryFilter<IReview>): Promise<IReview | null> {
+    return await Review.findOne(query as QueryFilter<IReview>);
   }
 
   /**
@@ -45,7 +45,7 @@ export class ReviewService {
    * @description Update Review - User access only
    * @Access User access - Protected
    */
-  public async findAndUpdateReview(query: FilterQuery<IReview>, update: UpdateQuery<IReview>, options: QueryOptions) {
+  public async findAndUpdateReview(query: QueryFilter<IReview>, update: UpdateQuery<IReview>, options: QueryOptions) {
     return await Review.findOneAndUpdate(query, update, options);
   }
 

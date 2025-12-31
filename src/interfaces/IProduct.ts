@@ -1,4 +1,4 @@
-import { FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
+import { QueryFilter, QueryOptions, UpdateQuery } from 'mongoose';
 import { IProduct, Product } from '@models/productModel';
 
 export class ProductService {
@@ -40,7 +40,7 @@ export class ProductService {
    * @feature Filter the product by query
    * @Access Public access
    */
-  public async getProductByQuery(query: FilterQuery<IProduct>): Promise<IProduct | null> {
+  public async getProductByQuery(query: QueryFilter<IProduct>): Promise<IProduct | null> {
     return (await Product.find(query).select('-image').select('-description').select('-embeddings').lean()) as any;
   }
 
@@ -65,7 +65,7 @@ export class ProductService {
    * @Access Admin access - Protected
    */
   public async findAndUpdateProduct(
-    query: FilterQuery<IProduct>,
+    query: QueryFilter<IProduct>,
     update: UpdateQuery<IProduct>,
     options: QueryOptions
   ) {

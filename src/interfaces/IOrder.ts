@@ -1,4 +1,4 @@
-import { FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
+import { QueryFilter, QueryOptions, UpdateQuery } from 'mongoose';
 import { IOrder, Order } from '@models/orderModel';
 
 export class OrderService {
@@ -22,8 +22,8 @@ export class OrderService {
    * @description Get Order Info - Public Access
    * @Access User access
    */
-  public async getOrderByQuery(query: FilterQuery<IOrder>): Promise<IOrder | null> {
-    return await Order.findOne(query as FilterQuery<IOrder>);
+  public async getOrderByQuery(query: QueryFilter<IOrder>): Promise<IOrder | null> {
+    return await Order.findOne(query as QueryFilter<IOrder>);
   }
 
   /**
@@ -46,7 +46,7 @@ export class OrderService {
    * @description Update Order - User access only
    * @Access User access - Protected
    */
-  public async findAndUpdateOrder(query: FilterQuery<IOrder>, update: UpdateQuery<IOrder>, options: QueryOptions) {
+  public async findAndUpdateOrder(query: QueryFilter<IOrder>, update: UpdateQuery<IOrder>, options: QueryOptions) {
     return await Order.findOneAndUpdate(query, update, options);
   }
 

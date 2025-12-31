@@ -64,7 +64,7 @@ app.get('/favicon.ico', (req: Request, res: Response) => {
 });
 
 // UnKnown Routes
-app.all('*', (req: Request, res: Response, next: NextFunction) => {
+app.all('/*splat', (req: Request, res: Response, next: NextFunction) => {
   const err = new Error(`Route ${req.originalUrl} not found`) as any;
   err.statusCode = 404;
   next(err);
@@ -89,7 +89,6 @@ cron.schedule(
     checkAndGenerateEmbeddings();
   },
   {
-    scheduled: true,
     timezone: 'Asia/Kolkata',
   }
 );

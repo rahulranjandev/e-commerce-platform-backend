@@ -3,20 +3,20 @@ import { z } from 'zod';
 const createProductSchema = z.object({
   body: z.object({
     name: z
-      .string({ required_error: 'Name is required' })
+      .string({ error: 'Name is required' })
       .min(3, { message: 'Name must be at least 3 characters' })
       .max(100, { message: 'Name must be at most 100 characters' }),
-    price: z.string({ required_error: 'Price is required' }).min(1),
+    price: z.string({ error: 'Price is required' }).min(1),
     description: z
-      .string({ required_error: 'Description is required' })
+      .string({ error: 'Description is required' })
       .min(10, { message: 'Description must be at least 10 characters' })
       .max(2000, { message: 'Description must be at most 500 characters' }),
     category: z.array(z.string()).min(1, { message: 'Category is required' }),
     brand: z
-      .string({ required_error: 'Brand is required' })
+      .string({ error: 'Brand is required' })
       .min(3, { message: 'Brand must be at least 3 characters' })
       .max(50, { message: 'Brand must be at most 50 characters' }),
-    countInStock: z.string({ required_error: 'Stock is required' }).min(0),
+    countInStock: z.string({ error: 'Stock is required' }).min(0),
   }),
 });
 
@@ -33,17 +33,9 @@ const updateProductSchema = z.object({
   }),
 });
 
-const ProductByCategorySchema = z.object({
-  params: z.object({
-    category: z.string().min(3).max(50),
-  }),
-});
+const ProductByCategorySchema = z.object({ params: z.object({ category: z.string().min(3).max(50) }) });
 
-const ProductByIdSchema = z.object({
-  params: z.object({
-    productId: z.string(),
-  }),
-});
+const ProductByIdSchema = z.object({ params: z.object({ productId: z.string() }) });
 
 export { createProductSchema, updateProductSchema, ProductByCategorySchema, ProductByIdSchema };
 
