@@ -16,6 +16,7 @@ This repository contains the backend code for our e-commerce platform. It is bui
 2. Install dependencies: `npm install`
 3. Set up environment variables: Create a `.env` file and add the necessary variables.
 4. Start the server: `npm start`
+5. Run tests: `npm test`
 
 ## Usage
 

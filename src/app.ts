@@ -5,10 +5,7 @@ import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
 import cookieParser from 'cookie-parser';
-import cron from 'node-cron';
-import { connectDB } from '@utils/connectDB';
-import { checkAndGenerateEmbeddings } from '@utils/generateEmbeddings';
-import { PORT, NODE_ENV } from '@config';
+import { NODE_ENV } from '@config';
 
 import router from '@routes/index';
 
@@ -81,20 +78,4 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-// Cron Job to check for new data and generate embeddings
-cron.schedule(
-  '*/5 * * * *',
-  () => {
-    console.log('Running cron job to check for new data and generate embeddings');
-    checkAndGenerateEmbeddings();
-  },
-  {
-    timezone: 'Asia/Kolkata',
-  }
-);
-
-app.listen(PORT ?? 3333, () => {
-  console.log(`Server is running on port ${PORT} && http://localhost:${PORT}`);
-
-  connectDB();
-});
+export default app;
