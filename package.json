@@ -19,7 +19,6 @@
   "devDependencies": {
     "@swc/cli": "^0.7.9",
     "@swc/core": "^1.15.8",
-    "@types/bcryptjs": "^3.0.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
