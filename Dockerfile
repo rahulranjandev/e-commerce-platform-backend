@@ -1,5 +1,5 @@
 # STAGE: Builder
-FROM node:22-alpine AS builder
+FROM node:24-alpine AS builder
 
 WORKDIR /builder
 
@@ -12,7 +12,7 @@ COPY . .
 RUN npm run build
 
 # STAGE: Prod Deploy Ready Image
-FROM node:22-alpine
+FROM node:24-alpine
 
 # Create necessary directories and set permissions before switching user
 WORKDIR /home/app
